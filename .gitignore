@@ -1,6 +1,30 @@
+# Environnements virtuels
+venv/
+env/
+
+# Fichiers Python compilés
 *.pyc
 __pycache__/
+
+# Base de données SQLite (si tu l'utilises en local)
 db.sqlite3
+
+# Fichiers de migration compilés
+*.log
+
+# Fichiers d'environnement (ne jamais pousser un .env avec ton SECRET_KEY)
 .env
+
+# Dossier de fichiers statiques collectés (en prod)
 staticfiles/
+
+# Médias uploadés en local
 media/
+
+# Configurations IDE (VSCode, PyCharm, etc.)
+.vscode/
+.idea/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
