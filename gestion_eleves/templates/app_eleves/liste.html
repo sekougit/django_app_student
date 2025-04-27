@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des élèves</title>
+    <link href="{% static 'app_eleves/css/style.css' %}" rel="stylesheet">
+    <!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"-->
+</head>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fields = ['age', 'note_francais', 'note_anglais', 'note_math'];
+    
+        fields.forEach(function(fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('input', function() {
+                    // Convertir la valeur en nombre
+                    let value = parseFloat(field.value);
+    
+                    // Si la valeur est négative, la remettre à zéro
+                    if (value < 0) {
+                        field.value = '';
+                    }
+                });
+            }
+        });
+    });
+</script>
+<body class="container mt-5">
+
+    <h1>Gestion des élèves</h1>
+    <!-- Affichage des messages de succès -->
+    {% if messages %}
+    <div class="success-message" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id_eleve" id="id_eleve">
+
+        <div class="row mb-3">
+            <div class="col">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" name="prenom" id="prenom" class="form-control" placeholder="Saisissez votre prénom" required>
+            </div>
+            <div class="col">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" name="nom" id="nom" class="form-control" placeholder="Saisissez votre nom" required>
+            </div>
+            <div class="col">
+                <label for="age" class="form-label">Âge</label>
+                <input type="number" name="age" id="age" class="form-control" placeholder="Entrez une valeur positive" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label for="note_francais" class="form-label">Note Français</label>
+                <input type="number" name="note_francais" id="note_francais" class="form-control" step="0.01" placeholder="Entrez une valeur positive (>=0)" required>
+            </div>
+            <div class="col">
+                <label for="note_anglais" class="form-label">Note Anglais</label>
+                <input type="number" name="note_anglais" id="note_anglais" class="form-control" step="0.01" placeholder="Entrez une valeur positive (>=0)" required>
+            </div>
+            <div class="col">
+                <label for="note_math" class="form-label">Note Math</label>
+                <input type="number" name="note_math" id="note_math" class="form-control" step="0.01" placeholder="Entrez une valeur positive (>=0)" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Ajouter</button>
+    </form>
+
+    <hr>
+
+    <h2>Liste des élèves</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Actions</th> <!-- Actions = Voir / Modifier / Supprimer -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for eleve in eleves %}
+            <tr>
+                <td>{{ eleve.id }}</td>
+                <td>{{ eleve.prenom }}</td>
+                <td>{{ eleve.nom }}</td>
+                <td>
+                    <a href="{% url 'app_eleves:detail_eleve' eleve.id %}" class="btn btn-info btn-sm">Voir</a>
+                    <a href="{% url 'app_eleves:modifier_eleve' eleve.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'app_eleves:supprimer_eleve' eleve.id %}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élève ?');">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
